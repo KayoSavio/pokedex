@@ -237,6 +237,33 @@ export default function PokemonDetail({ params }: { params: Promise<{ id: string
                     </span>
                 </div>
 
+                {/* Mega Evolutions Indicators (Moved out of central sprite container to flow better) */}
+                {pokemon.mega_evolutions && pokemon.mega_evolutions.length > 0 && (
+                    <div className="absolute left-8 lg:left-32 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-4">
+                        {pokemon.mega_evolutions.map((mega: any) => (
+                            <button
+                                key={mega.id}
+                                onClick={() => router.push(`/character/${mega.id}`)}
+                                className="relative group/mega"
+                                title={`Mega Evoluir para ${mega.name}`}
+                            >
+                                <div className="w-14 h-14 md:w-16 md:h-16 rounded-full overflow-hidden border-[3px] border-white/10 bg-black/40 backdrop-blur-md shadow-[0_0_15px_rgba(0,0,0,0.3)] transition-all duration-300 hover:scale-[1.15] hover:border-blue-400/50 hover:shadow-[0_0_20px_rgba(96,165,250,0.4)] flex items-center justify-center group-hover/mega:z-50 relative">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 group-hover/mega:opacity-100 transition-opacity" />
+                                    {/* Ícone customizado de Mega Evolução fornecido pelo usuário */}
+                                    <img
+                                        src="https://ih1.redbubble.net/image.4851243487.6970/raf,360x360,075,t,fafafa:ca443f4786.u1.jpg"
+                                        alt="Mega Evolution Symbol"
+                                        className="w-[85%] h-[85%] object-cover mix-blend-screen opacity-70 group-hover/mega:opacity-100 transition-opacity"
+                                    />
+                                </div>
+                                <span className="absolute left-full top-1/2 -translate-y-1/2 ml-4 bg-black/90 text-white text-[11px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-xl opacity-0 pointer-events-none group-hover/mega:opacity-100 transition-all duration-300 whitespace-nowrap border border-white/10 backdrop-blur-xl shadow-2xl translate-x-2 group-hover/mega:translate-x-0">
+                                    {mega.name.replace(' MEGA', '')}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 <div className="relative w-64 h-64 md:w-80 md:h-80 z-20 group">
                     <div className="absolute inset-0 bg-white/5 rounded-full blur-3xl scale-75 group-hover:scale-110 transition-transform duration-1000" />
 
