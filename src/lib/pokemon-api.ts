@@ -301,6 +301,30 @@ export async function getPokemons(
 }
 
 /**
+ * Função utilitária para traduzir texto usando a API gratuita MyMemory.
+ * Usamos para traduzir descrições e categorias do inglês para o português.
+ */
+async function translateText(text: string): Promise<string> {
+    if (!text || text === "Unknown" || text === "Descrição não informada") return text;
+
+    try {
+        const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt-BR&dt=t&q=' + encodeURIComponent(text);
+
+        const res = await fetch(url);
+        if (res.ok) {
+            const data = await res.json();
+            if (data && data[0]) {
+                return data[0].map((s: any) => s[0]).join('');
+            }
+        }
+    } catch (e) {
+        console.warn("Translation failed for text:", text.substring(0, 20) + "...");
+    }
+
+    return text;
+}
+
+/**
  * Busca os detalhes estruturais e status de um único Pokémon.
  * Integra dados de espécie (descrição/categoria).
  * @param id ou name do Pokémon.
@@ -341,15 +365,24 @@ export async function getPokemonDetails(id: string | number): Promise<PokemonDet
         if (speciesRes.ok) {
             speciesData = await speciesRes.json();
             if (speciesData) {
-                // Pegar a primeira descrição em inglês ou português se disponível
-                flavor = speciesData.flavor_text_entries.find(e => e.language.name === "en")?.flavor_text ||
-                    speciesData.flavor_text_entries[0]?.flavor_text || "Descrição não informada";
-
-                flavor = flavor.replace(/\f/g, ' '); // Limpar caracteres de controle
+                let nativeFlavor = speciesData.flavor_text_entries.find(e => e.language.name === "pt-BR" || e.language.name === "pt")?.flavor_text;
+                if (!nativeFlavor) {
+                    const fallbackFlavor = speciesData.flavor_text_entries.find(e => e.language.name === "en")?.flavor_text ||
+                        speciesData.flavor_text_entries[0]?.flavor_text || "Descrição não informada";
+                    flavor = await translateText(fallbackFlavor.replace(/\f/g, ' '));
+                } else {
+                    flavor = nativeFlavor.replace(/\f/g, ' ');
+                }
 
                 // Pegar a categoria (Genus)
-                category = speciesData.genera.find(g => g.language.name === "en")?.genus ||
-                    speciesData.genera[0]?.genus || "Unknown";
+                let nativeCategory = speciesData.genera.find(g => g.language.name === "pt-BR" || g.language.name === "pt")?.genus;
+                if (!nativeCategory) {
+                    const fallbackCategory = speciesData.genera.find(g => g.language.name === "en")?.genus ||
+                        speciesData.genera[0]?.genus || "Unknown";
+                    category = await translateText(fallbackCategory);
+                } else {
+                    category = nativeCategory;
+                }
 
                 genderRate = speciesData.gender_rate;
 
@@ -393,8 +426,17 @@ export async function getPokemonDetails(id: string | number): Promise<PokemonDet
                 const abRes = await fetch(a.ability.url, { next: { revalidate: 3600 } });
                 if (abRes.ok) {
                     const abData = await abRes.json();
-                    const description = abData.effect_entries.find((e: any) => e.language.name === "en")?.short_effect ||
-                        abData.flavor_text_entries.find((e: any) => e.language.name === "en")?.flavor_text || "";
+                    const ptDesc = abData.flavor_text_entries.find((e: any) => e.language.name === "pt-BR" || e.language.name === "pt")?.flavor_text;
+                    let description = "";
+
+                    if (ptDesc) {
+                        description = ptDesc;
+                    } else {
+                        const fallbackDesc = abData.effect_entries.find((e: any) => e.language.name === "en")?.short_effect ||
+                            abData.flavor_text_entries.find((e: any) => e.language.name === "en")?.flavor_text || "";
+                        description = await translateText(fallbackDesc);
+                    }
+
                     return { ...a, description };
                 }
             } catch (e) {

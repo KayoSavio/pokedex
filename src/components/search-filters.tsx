@@ -7,6 +7,7 @@ import { typeIcons } from "@/lib/type-icons";
 import { typeClasses } from "@/lib/pokemon-types";
 import { cn } from "@/lib/utils";
 import { REGIONS } from "@/lib/pokemon-api";
+import { getTranslatedType } from "@/lib/translations";
 
 const POKEMON_TYPES = [
     "Normal", "Fighting", "Flying", "Poison", "Ground", "Rock",
@@ -112,7 +113,7 @@ export function SearchFilters() {
                                                 dangerouslySetInnerHTML={{ __html: typeIcons[typeKey] || "" }}
                                             />
                                             <span className={cn(isSelected ? "text-white" : "text-inherit")}>
-                                                {type}
+                                                {getTranslatedType(type)}
                                             </span>
                                             {isSelected && (
                                                 <div className="absolute inset-x-0 bottom-0 h-[2px] bg-white opacity-50" />

@@ -13,6 +13,7 @@ import { typeIcons } from "@/lib/type-icons";
 import { typeClasses } from "@/lib/pokemon-types";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
+import { getTranslatedType } from "@/lib/translations";
 
 export default function Home() {
   const { setRegion, minId, maxId, typeFilters, setTypeFilter, resetFilters, searchQuery } = useMarvelStore();
@@ -150,7 +151,7 @@ export default function Home() {
                             className="w-3.5 h-3.5 flex items-center justify-center shrink-0 brightness-150"
                             dangerouslySetInnerHTML={{ __html: typeIcons[type.toLowerCase()] || "" }}
                           />
-                          <span>{type}</span>
+                          <span>{getTranslatedType(type)}</span>
                           <button
                             onClick={() => setTypeFilter(type)}
                             className="hover:bg-black/20 p-0.5 rounded-full transition-colors flex items-center justify-center cursor-pointer"

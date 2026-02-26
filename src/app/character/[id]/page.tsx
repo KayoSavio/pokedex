@@ -19,6 +19,7 @@ import { PokeballTransition } from "@/components/pokeball-transition";
 import { TypeMatchupModal } from "@/components/type-matchup-modal";
 import { TeamRocketError } from "@/components/team-rocket-error";
 import { getPokemonRegion } from "@/lib/pokemon-api";
+import { getTranslatedType } from "@/lib/translations";
 
 const habitatTranslations: Record<string, string> = {
     "cave": "Caverna",
@@ -317,7 +318,7 @@ export default function PokemonDetail({ params }: { params: Promise<{ id: string
                                         className="w-4 h-4 flex items-center justify-center brightness-150"
                                         dangerouslySetInnerHTML={{ __html: typeIcons[t.type.name] }}
                                     />
-                                    {t.type.name}
+                                    {getTranslatedType(t.type.name)}
                                 </button>
                             ))}
                         </div>
