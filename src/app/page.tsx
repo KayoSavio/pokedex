@@ -3,6 +3,7 @@
 import { CharacterList } from "@/components/character-list";
 import { RegionBanners } from "@/components/region-banners";
 import { useMarvelStore } from "@/lib/store";
+import { useShallow } from "zustand/react/shallow";
 import { PokedexScene } from "@/components/pokedex-scene";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -16,7 +17,17 @@ import { useState, useEffect } from "react";
 import { getTranslatedType } from "@/lib/translations";
 
 export default function Home() {
-  const { setRegion, minId, maxId, typeFilters, setTypeFilter, resetFilters, searchQuery } = useMarvelStore();
+  const { setRegion, minId, maxId, typeFilters, setTypeFilter, resetFilters, searchQuery } = useMarvelStore(
+    useShallow((state) => ({
+      setRegion: state.setRegion,
+      minId: state.minId,
+      maxId: state.maxId,
+      typeFilters: state.typeFilters,
+      setTypeFilter: state.setTypeFilter,
+      resetFilters: state.resetFilters,
+      searchQuery: state.searchQuery,
+    }))
+  );
   const [showPokedex, setShowPokedex] = useState(false);
 
   // Auto-show Pokedex when searching

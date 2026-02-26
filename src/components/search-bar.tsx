@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { useMarvelStore } from "@/lib/store";
+import { useShallow } from "zustand/react/shallow";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -11,7 +12,12 @@ import { SearchFilters } from "./search-filters";
 export function SearchBar() {
     const router = useRouter();
     const pathname = usePathname();
-    const { searchQuery, setSearchQuery } = useMarvelStore();
+    const { searchQuery, setSearchQuery } = useMarvelStore(
+        useShallow((state) => ({
+            searchQuery: state.searchQuery,
+            setSearchQuery: state.setSearchQuery,
+        }))
+    );
     const [localValue, setLocalValue] = useState(searchQuery);
     const debouncedValue = useDebounce(localValue, 500);
 

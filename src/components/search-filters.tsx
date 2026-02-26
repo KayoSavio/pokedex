@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Filter, X, Check, SlidersHorizontal } from "lucide-react";
 import { useMarvelStore } from "@/lib/store";
+import { useShallow } from "zustand/react/shallow";
 import { typeIcons } from "@/lib/type-icons";
 import { typeClasses } from "@/lib/pokemon-types";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,18 @@ export function SearchFilters() {
     const {
         minId, maxId, typeFilters, rarityFilter,
         setRegion, setTypeFilter, setRarityFilter, resetFilters
-    } = useMarvelStore();
+    } = useMarvelStore(
+        useShallow((state) => ({
+            minId: state.minId,
+            maxId: state.maxId,
+            typeFilters: state.typeFilters,
+            rarityFilter: state.rarityFilter,
+            setRegion: state.setRegion,
+            setTypeFilter: state.setTypeFilter,
+            setRarityFilter: state.setRarityFilter,
+            resetFilters: state.resetFilters,
+        }))
+    );
     const popoverRef = useRef<HTMLDivElement>(null);
 
     // Close on click outside
