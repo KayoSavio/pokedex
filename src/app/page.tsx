@@ -2,7 +2,7 @@
 
 import { CharacterList } from "@/components/character-list";
 import { RegionBanners } from "@/components/region-banners";
-import { useMarvelStore } from "@/lib/store";
+import { usePokemonStore } from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
 import { PokedexScene } from "@/components/pokedex-scene";
 import NextImage from "next/image";
@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 import { getTranslatedType } from "@/lib/translations";
 
 export default function Home() {
-  const { setRegion, minId, maxId, typeFilters, setTypeFilter, resetFilters, searchQuery } = useMarvelStore(
+  const { setRegion, minId, maxId, typeFilters, setTypeFilter, resetFilters, searchQuery } = usePokemonStore(
     useShallow((state) => ({
       setRegion: state.setRegion,
       minId: state.minId,

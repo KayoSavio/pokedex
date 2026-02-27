@@ -1,6 +1,6 @@
 "use client";
 
-import { useMarvelStore } from "@/lib/store";
+import { usePokemonStore } from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
 import { usePokemons } from "@/hooks/usePokemonQuery";
 import { CharacterCard } from "./character-card";
@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 export function CharacterList() {
-    const { searchQuery, minId, maxId, typeFilters, rarityFilter } = useMarvelStore(
+    const { searchQuery, minId, maxId, typeFilters, rarityFilter } = usePokemonStore(
         useShallow((state) => ({
             searchQuery: state.searchQuery,
             minId: state.minId,

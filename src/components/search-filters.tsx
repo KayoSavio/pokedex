@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Filter, X, Check, SlidersHorizontal } from "lucide-react";
-import { useMarvelStore } from "@/lib/store";
+import { usePokemonStore } from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
 import { typeIcons } from "@/lib/type-icons";
 import { typeClasses } from "@/lib/pokemon-types";
@@ -22,7 +22,7 @@ export function SearchFilters() {
     const {
         minId, maxId, typeFilters, rarityFilter,
         setRegion, setTypeFilter, setRarityFilter, resetFilters
-    } = useMarvelStore(
+    } = usePokemonStore(
         useShallow((state) => ({
             minId: state.minId,
             maxId: state.maxId,

@@ -4,7 +4,7 @@ import React from "react";
 import { SearchBar } from "@/components/search-bar";
 import { CharacterList } from "@/components/character-list";
 import { Filter, SlidersHorizontal, Trash2, X, ChevronLeft } from "lucide-react";
-import { useMarvelStore } from "@/lib/store";
+import { usePokemonStore } from "@/lib/store";
 import { useShallow } from "zustand/react/shallow";
 import { SearchFilters } from "@/components/search-filters";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ import { getTranslatedType } from "@/lib/translations";
 
 export default function SearchPage() {
     const router = useRouter();
-    const { minId, maxId, typeFilters, rarityFilter, resetFilters, setRegion, setTypeFilter, setRarityFilter } = useMarvelStore(
+    const { minId, maxId, typeFilters, rarityFilter, resetFilters, setRegion, setTypeFilter, setRarityFilter } = usePokemonStore(
         useShallow((state) => ({
             minId: state.minId,
             maxId: state.maxId,
